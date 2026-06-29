@@ -17,7 +17,11 @@ public class App {
             System.out.println("the server is ready");
             while (true) {
                 Socket cleint = sc.accept();
-                System.out.println("the server is acepted a new client");
+                System.out.println(
+                    "Server accepted a new client. Processing..."
+                );
+                // Simulate a slow database query taking 5 seconds
+                Thread.sleep(5000);
                 PrintWriter pw = new PrintWriter(
                     new BufferedWriter(
                         new OutputStreamWriter(cleint.getOutputStream())
