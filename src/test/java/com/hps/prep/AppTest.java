@@ -64,41 +64,4 @@ public class AppTest extends TestCase {
             throw new RuntimeException("Test failed due to network error", e);
         }
     }
-
-    /**
-     * Concurrency Test
-     */
-    public void concurrencyTest() {
-        ExecutorService es = Executors.newFixedThreadPool(2);
-
-        Runnable clientTask = () -> {
-            long start = System.currentTimeMillis();
-            try (Socket sc = new Socket("127.0.0.1", 8080)) {
-                BufferedReader in = new BufferedReader(
-                    new InputStreamReader(sc.getInputStream())
-                );
-                in.readLine();
-
-                long end = System.currentTimeMillis();
-                System.out.println(
-                    "Client finished in: " + (end - start) + " ms"
-                );
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        };
-
-        es.execute(clientTask);
-        es.execute(clientTask);
-
-        es.shutdown();
-
-        try {
-            // Force the main test thread to wait up to 15 seconds for the clients to finish
-            es.awaitTermination(15, TimeUnit.SECONDS);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        es.shutdownNow();
-    }
 }
