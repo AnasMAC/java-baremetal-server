@@ -1,4 +1,4 @@
-package com.hps.prep;
+package com.pfe.prep;
 
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
@@ -15,16 +15,17 @@ public class HttpServer {
     public HttpServer(Integer port, String host) {
         this.port = port;
         this.host = host;
-        es = Executors.newCachedThreadPool();
+        es = Executors.newFixedThreadPool(10);
     }
 
     public void start() {
         try (ServerSocket sc = new ServerSocket()) {
             sc.bind(new InetSocketAddress(host, port.intValue()));
             System.out.println("the server is ready ");
+            Dispatcher dispatcher = new Dispatcher();
             while (true) {
                 Socket client = sc.accept();
-                es.execute(new ClientWorker(client));
+                es.execute(new ClientWorker(client, dispatcher));
             }
         } catch (Exception e) {
             System.out.println("error in the main method with :" + e);
