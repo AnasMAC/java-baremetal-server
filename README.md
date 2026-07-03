@@ -36,7 +36,9 @@ Safely reads and streams external HTML templates back to the client using FileRe
 
 📊 Benchmarks (Proving the Architecture)
 
-To validate the Thread Pool concurrency, an artificial 5-second processing delay was added to the server logic, and tested using Apache Benchmark (ab -n 10 -c 10 http://localhost:8080/).
+To validate the Thread Pool concurrency, an artificial 5-second processing delay was added to the server logic, and tested using Apache Benchmark
+    
+    ab -n 10 -c 10 http://localhost:8080/
 
 Single-Threaded Server: ~50.0 seconds total processing time.
 
@@ -56,23 +58,20 @@ Multi-Threaded Server (Pool of 10): ~10.0 seconds total processing time.
 
 Clone the repository:
 
-git clone [https://github.com/AnasMAC/java-baremetal-server.git](https://github.com/AnasMAC/java-baremetal-server.git)
-
+    git clone https://github.com/AnasMAC/java-baremetal-server.git
 
 Compile the Java files:
 
-mvn clean compile
+    mvn clean compile
 
 
 Start the server:
 
-mvn exec:java -Dexec.mainClass="com.pfe.prep.App"
+    mvn exec:java -Dexec.mainClass="com.pfe.prep.App"
 
 
 Open your browser or use curl:
 
-http://localhost:8080/ (Home)
-
-http://localhost:8080/user (User Template Route)
+    http://localhost:8080/user (User Template Route)
 
 Developed as an advanced systems engineering exercise. Target: Enterprise Backend Infrastructure.
