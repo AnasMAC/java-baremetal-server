@@ -26,7 +26,11 @@ Packet Parsing: Dynamically reads raw TCP streams via BufferedReader, extracting
 
 Polymorphism: Uses an abstract Controller class to enforce standard HTTP methods (doGet, doPost, etc.).
 
-The Registry: A HashMap routes parsed URLs directly to instantiated controller objects in $O(1)$ time.
+Automatic Component Scanning (Reflection): Built a custom directory scanner to auto-detect classes annotated with a custom @RequestMapping at runtime.
+
+The Registry: A HashMap routes parsed URLs directly to dynamically instantiated controller objects in $O(1)$ time.
+
+Engineering Challenge (ClassLoader Isolation): Overcame a critical JVM classpath isolation issue. Initially, a custom ClassLoader reading from src/main/java failed to recognize annotations at runtime due to the JVM treating identical classes loaded by different ClassLoaders as distinct, incompatible types. Resolved by aligning the scanner with Maven's build lifecycle (targeting the target/classes directory) and delegating to the System ClassLoader via Class.forName(), ensuring annotation retention and seamless type matching.
 
 Fail-Safe Design: Automatically falls back to standard 404 Not Found or 400 Bad Request protocols if the routing fails or the packet is malformed.
 
@@ -36,9 +40,10 @@ Safely reads and streams external HTML templates back to the client using FileRe
 
 📊 Benchmarks (Proving the Architecture)
 
-To validate the Thread Pool concurrency, an artificial 5-second processing delay was added to the server logic, and tested using Apache Benchmark
-    
-    ab -n 10 -c 10 http://localhost:8080/
+To validate the Thread Pool concurrency, an artificial 5-second processing delay was added to the server logic, and tested using Apache Benchmark:
+
+ab -n 10 -c 10 http://localhost:8080/
+
 
 Single-Threaded Server: ~50.0 seconds total processing time.
 
@@ -48,7 +53,7 @@ Multi-Threaded Server (Pool of 10): ~10.0 seconds total processing time.
 
 [x] Phase 1: Core Concurrency - Implemented the ThreadPoolExecutor and isolated memory handling.
 
-[x] Phase 2: The Routing Dispatcher - Built the dynamic HTTP parser and OOP HashMap router.
+[x] Phase 2: The Routing Dispatcher - Built the dynamic HTTP parser, OOP HashMap router, and Reflection-based Component Scanner.
 
 [ ] Phase 3: The Database Bottleneck - Connecting the server to PostgreSQL and implementing a raw JDBC Connection Pool.
 
@@ -58,20 +63,21 @@ Multi-Threaded Server (Pool of 10): ~10.0 seconds total processing time.
 
 Clone the repository:
 
-    git clone https://github.com/AnasMAC/java-baremetal-server.git
+git clone [https://github.com/AnasMAC/java-baremetal-server.git](https://github.com/AnasMAC/java-baremetal-server.git)
+
 
 Compile the Java files:
 
-    mvn clean compile
+mvn clean compile
 
 
 Start the server:
 
-    mvn exec:java -Dexec.mainClass="com.pfe.prep.App"
+mvn exec:java -Dexec.mainClass="com.pfe.prep.App"
 
 
 Open your browser or use curl:
 
-    http://localhost:8080/user (User Template Route)
+http://localhost:8080/user (User Template Route)
 
 Developed as an advanced systems engineering exercise. Target: Enterprise Backend Infrastructure.

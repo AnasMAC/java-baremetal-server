@@ -1,8 +1,13 @@
 package com.pfe.prep.router;
 
+import com.pfe.prep.Controller;
+import com.pfe.prep.RequestMapping;
+
 /**
  * userController
  */
+
+@RequestMapping("/user")
 public class userController extends Controller {
 
     @Override
