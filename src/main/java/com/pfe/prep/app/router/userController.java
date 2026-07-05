@@ -1,8 +1,8 @@
-package com.pfe.prep.router;
+package com.pfe.prep.app.router;
 
-import com.pfe.prep.Controller;
-import com.pfe.prep.RequestMapping;
-import com.pfe.prep.db.CustomConnectionPool;
+import com.pfe.prep.core.annotations.RequestMapping;
+import com.pfe.prep.core.db.CustomConnectionPool;
+import com.pfe.prep.core.mvc.Controller;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

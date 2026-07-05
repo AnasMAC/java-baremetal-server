@@ -1,4 +1,4 @@
-package com.pfe.prep;
+package com.pfe.prep.core.annotations;
 
 import java.lang.annotation.*;
 

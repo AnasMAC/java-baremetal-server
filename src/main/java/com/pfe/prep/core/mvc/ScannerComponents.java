@@ -1,4 +1,4 @@
-package com.pfe.prep;
+package com.pfe.prep.core.mvc;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;

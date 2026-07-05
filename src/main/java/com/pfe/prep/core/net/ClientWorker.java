@@ -1,5 +1,6 @@
-package com.pfe.prep;
+package com.pfe.prep.core.net;
 
+import com.pfe.prep.core.mvc.Dispatcher;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.InputStreamReader;

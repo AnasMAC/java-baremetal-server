@@ -1,7 +1,8 @@
-package com.pfe.prep;
+package com.pfe.prep.core.mvc;
 
-import com.pfe.prep.db.CustomConnectionPool;
-import com.pfe.prep.router.userController;
+import com.pfe.prep.app.router.userController;
+import com.pfe.prep.core.annotations.RequestMapping;
+import com.pfe.prep.core.db.CustomConnectionPool;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -30,8 +31,8 @@ public class Dispatcher {
         CustomConnectionPool db = new CustomConnectionPool();
 
         discoveredComponents = scannerComponents(
-            "com.pfe.prep.router",
-            "target/classes/com/pfe/prep/router"
+            "com.pfe.prep.app.router",
+            "target/classes/com/pfe/prep/app/router"
         );
 
         for (Class<?> clazz : discoveredComponents) {

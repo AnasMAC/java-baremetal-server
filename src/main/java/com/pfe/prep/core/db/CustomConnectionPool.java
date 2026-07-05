@@ -1,4 +1,4 @@
-package com.pfe.prep.db;
+package com.pfe.prep.core.db;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
