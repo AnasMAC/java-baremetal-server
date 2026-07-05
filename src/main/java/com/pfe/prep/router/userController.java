@@ -2,6 +2,7 @@ package com.pfe.prep.router;
 
 import com.pfe.prep.Controller;
 import com.pfe.prep.RequestMapping;
+import com.pfe.prep.db.CustomConnectionPool;
 
 /**
  * userController
@@ -9,6 +10,12 @@ import com.pfe.prep.RequestMapping;
 
 @RequestMapping("/user")
 public class userController extends Controller {
+
+    private CustomConnectionPool db;
+
+    public userController(CustomConnectionPool db) {
+        this.db = db;
+    }
 
     @Override
     public String doGet() {

@@ -1,5 +1,6 @@
 package com.pfe.prep;
 
+import com.pfe.prep.db.CustomConnectionPool;
 import com.pfe.prep.router.userController;
 import java.io.BufferedReader;
 import java.io.File;
@@ -26,6 +27,8 @@ public class Dispatcher {
     private Set<Class<?>> discoveredComponents;
 
     public Dispatcher() {
+        CustomConnectionPool db = new CustomConnectionPool();
+
         discoveredComponents = scannerComponents(
             "com.pfe.prep.router",
             "target/classes/com/pfe/prep/router"
@@ -42,8 +45,8 @@ public class Dispatcher {
                 System.out.println("the path in the constructor: " + path);
                 try {
                     Controller controllerInstance = (Controller) clazz
-                        .getDeclaredConstructor()
-                        .newInstance();
+                        .getDeclaredConstructor(CustomConnectionPool.class)
+                        .newInstance(db);
                     routers.put(path, controllerInstance);
                 } catch (Exception e) {
                     System.err.println(
