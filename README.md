@@ -6,7 +6,7 @@ Building the magic behind @RestController. A zero-dependency Java server demonst
 
 Modern enterprise development relies heavily on frameworks like Spring Boot and embedded servers like Tomcat. While these tools are powerful, they often hide the underlying mechanics of network I/O, thread management, and HTTP protocol parsing.
 
-This project is a bare-metal implementation of an HTTP server built in pure Java (no Spring, no external web dependencies). It is designed to strip away the "magic" and demonstrate a deep, foundational understanding of concurrent systems architecture, raw socket communication, and dynamic routing dispatchers.
+This project is a bare-metal implementation of an HTTP server built in pure Java (no Spring, no external web dependencies). It is designed to strip away the "magic" and demonstrate a deep, foundational understanding of concurrent systems architecture, raw socket communication, dynamic routing dispatchers, and database connection pooling.
 
 🏗️ Core Architecture & Features
 
@@ -34,9 +34,15 @@ Engineering Challenge (ClassLoader Isolation): Overcame a critical JVM classpath
 
 Fail-Safe Design: Automatically falls back to standard 404 Not Found or 400 Bad Request protocols if the routing fails or the packet is malformed.
 
-3. I/O Template Rendering
+3. Custom Database Connection Pool & IoC
 
-Safely reads and streams external HTML templates back to the client using FileReader and try-with-resources to prevent memory leaks and dangling file pointers.
+Modern frameworks like Spring rely on tools like HikariCP and Inversion of Control (IoC). This engine implements its own thread-safe pool and injection mechanism.
+
+Thread-Safe Pooling: Utilizes ArrayBlockingQueue to pre-initialize and manage PostgreSQL connections. Native blocking mechanisms handle thread waiting without CPU-intensive loops.
+
+Dependency Injection (IoC): The Dispatcher acts as an IoC container, instantiating the Connection Pool as a Singleton and injecting it into Controllers via Reflection at runtime.
+
+Server-Side Rendering (SSR): Complete elimination of external HTML templates by dynamically generating pure HTML/Tailwind dashboards directly within the Java Controller layer, parsing SQL ResultSets into UI tables in real-time.
 
 📊 Benchmarks (Proving the Architecture)
 
@@ -55,11 +61,28 @@ Multi-Threaded Server (Pool of 10): ~10.0 seconds total processing time.
 
 [x] Phase 2: The Routing Dispatcher - Built the dynamic HTTP parser, OOP HashMap router, and Reflection-based Component Scanner.
 
-[ ] Phase 3: The Database Bottleneck - Connecting the server to PostgreSQL and implementing a raw JDBC Connection Pool.
+[x] Phase 3: The Database Bottleneck - Connected the server to PostgreSQL, implemented a raw JDBC Connection Pool, and built an SSR dashboard.
 
 [ ] Phase 4: The NIO Refactor - Upgrading the bare-metal server from blocking java.net threads to java.nio event loops (Selector/SocketChannel).
 
-💻 How to Run
+💻 How to Run & Test
+
+1. Database Setup (PostgreSQL)
+
+Before running the server, create a local PostgreSQL database named barmetal and run the following script:
+
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL
+);
+
+INSERT INTO users (name, email) VALUES ('Mohamed Anas', 'anas@example.com');
+
+
+Note: Ensure you update the JDBC URL credentials in CustomConnectionPool.java to match your local setup.
+
+2. Run the Server
 
 Clone the repository:
 
@@ -76,8 +99,8 @@ Start the server:
 mvn exec:java -Dexec.mainClass="com.pfe.prep.App"
 
 
-Open your browser or use curl:
+Open your browser to test the interactive SSR Dashboard:
 
-http://localhost:8080/user (User Template Route)
+http://localhost:8080/user
 
 Developed as an advanced systems engineering exercise. Target: Enterprise Backend Infrastructure.
