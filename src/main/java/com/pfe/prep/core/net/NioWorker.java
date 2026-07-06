@@ -25,15 +25,23 @@ public class NioWorker implements Runnable {
         ByteBuffer buffer = ByteBuffer.allocate(1024);
         StringBuilder sb = new StringBuilder();
         try {
+            // Thread.sleep(5000);
             int r = 1;
-            while ((r = sc.read(buffer)) != 0) {
+            while ((r = sc.read(buffer)) > 0) {
                 buffer.flip();
-                sb.append(new String(buffer.array(), StandardCharsets.UTF_8));
+                sb.append(
+                    new String(
+                        buffer.array(),
+                        0,
+                        buffer.limit(),
+                        StandardCharsets.UTF_8
+                    )
+                );
                 buffer.clear();
             }
             String message = sb.toString();
 
-            String res = dispatcher.rout(message);
+            String res = dispatcher.rout(message.split("\n")[0]);
             ByteBuffer resBuffer = ByteBuffer.wrap(res.getBytes());
             sc.write(resBuffer);
             resBuffer.clear();

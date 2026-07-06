@@ -8,9 +8,6 @@ import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.Iterator;
 import java.util.Set;
-import java.util.concurrent.Executor;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 /**
  * NioServer
@@ -19,16 +16,17 @@ public class NioServer {
 
     private Integer port;
     private String host;
+    private SelectorsPool pool;
 
     public NioServer(Integer port, String host) {
         this.port = port;
         this.host = host;
+        pool = new SelectorsPool();
     }
 
     public void start() {
         try (ServerSocketChannel ssc = ServerSocketChannel.open()) {
             ssc.bind(new InetSocketAddress(host, port));
-            Dispatcher dispatcher = new Dispatcher();
             Selector selector = Selector.open();
             ssc.configureBlocking(false);
             ssc.register(selector, SelectionKey.OP_ACCEPT);
@@ -42,12 +40,12 @@ public class NioServer {
                     if (key.isAcceptable()) {
                         SocketChannel sc = ssc.accept();
                         sc.configureBlocking(false);
-                        sc.register(selector, SelectionKey.OP_READ);
+                        pool.execute(sc);
                     }
-                    if (key.isReadable()) {
-                        SocketChannel sc = (SocketChannel) key.channel();
-                        new NioWorker(sc, dispatcher).run();
-                    }
+                    // if (key.isReadable()) {
+                    //     SocketChannel sc = (SocketChannel) key.channel();
+                    //     new NioWorker(sc, dispatcher).run();
+                    // }
                     iter.remove();
                 }
             }
