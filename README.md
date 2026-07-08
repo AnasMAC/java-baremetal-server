@@ -1,6 +1,3 @@
-Here is your text fully formatted and optimized for GitHub. I added language tags to the code blocks (Bash, SQL), utilized blockquotes for emphasis, and structured the features and roadmap with clean markdown syntax so it renders perfectly on your repository page.
-
-
 # Bare-Metal Java HTTP Engine 🚀
 
 > **Building the magic behind `@RestController`.** A zero-dependency Java server demonstrating low-level socket programming, Non-Blocking I/O (NIO), HTTP packet parsing, and Multi-Reactor concurrency.
@@ -106,9 +103,3 @@ mvn exec:java -Dexec.mainClass="com.pfe.prep.App"
 Open your browser to test the interactive SSR Dashboard: [http://localhost:8080/user](https://www.google.com/search?q=http://localhost:8080/user)
 
 ---
-
-*Developed as an advanced systems engineering exercise. Target: Enterprise Backend Infrastructure.*
-
-```
-
-```
